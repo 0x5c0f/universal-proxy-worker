@@ -1,0 +1,18 @@
+# 真实配置文件（含域名、KV namespace id），不提交
+# 使用模板初始化：cp wrangler.toml.example wrangler.toml
+wrangler.toml
+
+# Wrangler 缓存与构建输出
+.wrangler/
+dist/
+
+# 本地环境变量
+.dev.vars
+
+# Node
+node_modules/
+npm-debug.log*
+
+# 系统文件
+.DS_Store
+Thumbs.db

@@ -1,0 +1,66 @@
+# wrangler.toml — Cloudflare Workers 部署配置
+# 文档：https://developers.cloudflare.com/workers/wrangler/configuration/
+#
+# 首次部署步骤：
+#   1. 复制此文件：cp wrangler.toml.example wrangler.toml（若从模板克隆）
+#   2. 修改 [[routes]] 中的域名为你自己的域名
+#   3. 执行 wrangler kv namespace create MIRROR_STATS，填入返回的 id
+#   4. wrangler deploy
+
+name = "universal-mirror-proxy"
+main = "universal-proxy-worker.js"
+compatibility_date = "2024-01-01"
+workers_dev = true
+
+# ── 免费计划限制（不可配置，仅供参考）───────────────────
+# 每日请求：100,000 次 / CPU 时间：10ms / 内存：128MB
+# KV 读写：100,000 次读 / 1,000 次写 / 1GB 存储
+# ────────────────────────────────────────────────────────
+
+[observability]
+enabled = true
+
+[vars]
+ENABLE_LOGS = "true"
+
+# ── 自定义域名路由（替换为你自己的域名）────────────────
+# 需要：域名托管在 Cloudflare + 对应子域名 CNAME 开启橙云代理
+
+[[routes]]
+pattern = "docker.your-domain.com/*"
+zone_name = "your-domain.com"
+
+[[routes]]
+pattern = "ghcr.your-domain.com/*"
+zone_name = "your-domain.com"
+
+[[routes]]
+pattern = "gcr.your-domain.com/*"
+zone_name = "your-domain.com"
+
+[[routes]]
+pattern = "gar.your-domain.com/*"
+zone_name = "your-domain.com"
+
+[[routes]]
+pattern = "quay.your-domain.com/*"
+zone_name = "your-domain.com"
+
+[[routes]]
+pattern = "npm.your-domain.com/*"
+zone_name = "your-domain.com"
+
+[[routes]]
+pattern = "pypi.your-domain.com/*"
+zone_name = "your-domain.com"
+
+[[routes]]
+pattern = "gh.your-domain.com/*"
+zone_name = "your-domain.com"
+
+# ── KV 统计存储 ───────────────────────────────────────────
+# 执行后填入 id：wrangler kv namespace create MIRROR_STATS
+
+[[kv_namespaces]]
+binding = "MIRROR_STATS"
+id = "YOUR_KV_NAMESPACE_ID"
